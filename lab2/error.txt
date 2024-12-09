@@ -1,0 +1,3 @@
+Error: Name 'michael' needs to start uppercase!
+Error: Name 'sofia' needs to start uppercase!
+Error: Name 'Th=omas' contains an invalid character '='!
