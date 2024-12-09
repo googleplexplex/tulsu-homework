@@ -1,21 +1,40 @@
 #!/usr/bin/python3
+import sys
 
-from sys import stderr, stdin
-import re
+def validate_name(name: str) -> None:
+    if not name[0].isupper():
+        raise ValueError(f"The name '{name}' must start with an uppercase letter!")
+    
+    if not name.isalpha():
+        raise ValueError(f"The name '{name}' contains invalid characters!")
 
+def greet_user(name: str) -> None:
+    print(f"Nice to meet you {name}!")
 
-try:
-    for line in stdin:
-        try:
+def main():
+    is_interactive = sys.stdin.isatty()
+
+    if is_interactive:
+        while True:
+            try:
+                name = input("Hello! What's your name?")
+                validate_name(name)
+                greet_user(name)
+
+            except ValueError as e:
+                print(f"Error: {e}", file=sys.stderr)
+
+            except KeyboardInterrupt:
+                print("\nGoodbye!")
+                break
+    else:
+        for line in sys.stdin:
             name = line.strip()
-            
-            if not name[0].isupper():
-                raise Exception("Name needs to start in uppercase!")
-            if not bool(re.match(r"^[A-Za-z]+$", name)):
-                raise Exception("Invalid letters!")
+            try:
+                validate_name(name)
+                greet_user(name)
+            except ValueError as e:
+                print(f"Error: {e}", file=sys.stderr)
 
-            print(f"Nice to see you {name}!")
-        except Exception as e:
-            print(f"Error: {str(e)}", file=stderr)
-except KeyboardInterrupt:
-    print("\nGoodbye!")
+if __name__ == "__main__":
+    main()
